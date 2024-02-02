@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CatalogSchema.xsd ">
+    <effectiveDate>2013-02-08T00:00:00+00:00</effectiveDate>
+    <catalogName>Movies</catalogName>
+    <recurringBillingMode>IN_ADVANCE</recurringBillingMode>
+    <currencies>
+        <currency>USD</currency>
+    </currencies>
+    <products>
+        <product name="Movies">
+            <category>BASE</category>
+        </product>
+    </products>
+    <rules>
+        <changePolicy>
+            <changePolicyCase>
+                <policy>IMMEDIATE</policy>
+            </changePolicyCase>
+        </changePolicy>
+        <cancelPolicy>
+            <cancelPolicyCase>
+                <policy>IMMEDIATE</policy>
+            </cancelPolicyCase>
+        </cancelPolicy>
+    </rules>
+    <plans>
+      <plan name="movies-monthly">
+          <product>Movies</product>
+          <initialPhases>
+             <phase type="TRIAL">
+                 <duration>
+                     <unit>DAYS</unit>
+                     <number>10</number>
+                 </duration>
+                 <fixed>
+                   <fixedPrice>
+                   </fixedPrice>
+                 </fixed>
+             </phase>
+          </initialPhases>
+          <finalPhase type="EVERGREEN">
+              <duration>
+                  <unit>UNLIMITED</unit>
+              </duration>
+              <recurring>
+                  <billingPeriod>MONTHLY</billingPeriod>
+                  <recurringPrice>
+                      <price>
+                          <currency>USD</currency>
+                          <value>10.00</value>
+                      </price>
+                  </recurringPrice>
+              </recurring>
+          </finalPhase>
+      </plan>
+    </plans>
+    <priceLists>
+        <defaultPriceList name="DEFAULT">
+            <plans>
+                <plan>movies-monthly</plan>
+            </plans>
+        </defaultPriceList>
+    </priceLists>
+</catalog>
