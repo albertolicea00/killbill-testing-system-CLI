@@ -1,0 +1,85 @@
+name: Build and Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-windows-64:
+    runs-on: windows-2019
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies and build executable using Makefile
+        run: |
+          python -m pip install --upgrade pip
+          make build-windows-64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable_64
+          path: dist/win-script_64.exe
+
+  build-windows-32:
+    runs-on: windows-2019
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies and build executable using Makefile
+        run: |
+          python -m pip install --upgrade pip
+          make build-windows-32
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable_32
+          path: dist_32/win-script_32.exe
+
+  release:
+    needs: [build-windows-64, build-windows-32]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download artifact win-64-bit
+        uses: actions/download-artifact@v4
+        with:
+          name: executable_64
+          path: dist
+
+      - name: Download artifact win-32-bit
+        uses: actions/download-artifact@v4
+        with:
+          name: executable_32
+          path: dist_32
+
+      - name: Upload win-64-bit asset to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/win-script_64.exe
+          asset_name: win-script_64.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload win-32-bit asset to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist_32/win-script_32.exe
+          asset_name: win-script_32.exe
+          asset_content_type: application/octet-stream
